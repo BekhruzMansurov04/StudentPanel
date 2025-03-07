@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Admin Dashboard</title>
+</head>
+<body class="bg-orange-50">
+    <div id="sidebar" class="w-64 bg-orange-50 p-5 h-screen fixed flex flex-col justify-between transition-all duration-300">
+        <div>
+            <h1 class="text-lg font-bold border-l-4 border-yellow-500 pl-2">Admin Students</h1>
+            <div class="text-center mt-5">
+                <img src="student.jpeg" class="w-20 h-20 mx-auto rounded-full object-cover">
+                <h2 class="font-bold mt-2"><span id="name"></span></h2>
+                <p class="text-yellow-500">Admin</p>
+            </div>
+            <button id="study" class="w-full bg-yellow-500 text-black font-semibold rounded-lg shadow-md hover:bg-yellow-600 transition p-2 mt-5">
+                Students
+            </button>
+        </div>
+        <button id="logout" class="w-full text-red-600 font-semibold rounded-lg p-2 hover:bg-red-100 transition">
+            Logout 🔄
+        </button>
+    </div>
+
+    <div id="main-content" class="ml-64 transition-all duration-300 p-6">
+        <div class="h-[60px] border-b bg-orange-50 flex items-center justify-between px-6">
+            <button onclick="toggle()">
+                <img src="caret-circle-down 1.png" class="w-5 h-5">
+            </button>
+            <div class="flex items-center space-x-4">
+                <img src="bell 1.png" class="w-5 h-5">
+            </div>
+        </div>
+        <div class="flex-1 p-8 bg-gray-50 h-[700px]">
+            <h2 id="namek" class="text-2xl font-bold mb-4"><span></span></h2>
+            <hr>
+            <br>
+            <br>
+            <div class="bg-white p-6 rounded-lg shadow-md flex items-center space-x-6 w-[500px]">
+                <img src="student.jpeg" class="w-24 h-24 rounded-lg object-cover">
+                <div class="flex-1">
+                    <p class="text-gray-400 text-sm">Name</p>
+                    <h2 id="nameq" class="font-bold text-lg"><span></span></h2>
+                    <p class="text-gray-400 text-sm mt-2">Email</p>
+                    <p class="text-black"><span id="email"></span></p>
+                    <p class="text-gray-400 text-sm mt-2">Phone</p>
+                    <p class="text-black"><span id="phone"></span></p>
+                    <p class="text-gray-400 text-sm mt-2">Date admission</p>
+                    <p id="date1" class="text-black"><span></span></p>
+                </div>
+                <img src="Vector.png" class="w-5 h-13 text-yellow-500 cursor-pointer">
+            </div>
+        </div>
+    </div>
+        
+    </div>
+    <script>
+
+         document.addEventListener("DOMContentLoaded", function () {
+        
+            let student = JSON.parse(localStorage.getItem("selectedStudent"));
+
+            if (student) {
+                document.getElementById("nameq").textContent = student.name;
+                document.getElementById("namek").textContent = student.name;
+                document.getElementById("name").textContent = student.name;
+                document.getElementById("email").textContent = student.email;
+                document.getElementById("phone").textContent = student.phone;
+                document.getElementById("date1").textContent = student.date;
+            } else {
+                document.getElementById("main-content").innerHTML = "<p>No student data found.</p>";
+            }
+        });
+
+
+        function toggle() {
+            document.getElementById('sidebar').classList.toggle('-ml-64');
+            document.getElementById('main-content').classList.toggle('ml-0');
+        }
+
+        let logout = document.getElementById("logout");
+        logout.addEventListener("click", function(){
+            window.location.href = "student.html";
+        })
+        let study = document.getElementById("study");
+        study.addEventListener("click", function(){
+            window.location.href = "student.html";
+        })
+    </script>
+    </body>
+    </html>
