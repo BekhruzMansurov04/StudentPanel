@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Admin Dashboard</title>
+</head>
+<body class="bg-orange-50">
+    <div id="sidebar" class="w-64 bg-orange-50 p-5 h-screen fixed flex flex-col justify-between transition-all duration-300">
+        <div>
+            <h1 class="text-lg font-bold border-l-4 border-yellow-500 pl-2">Admin Students</h1>
+            <div class="text-center mt-5">
+                <img src="student.jpeg" class="w-20 h-20 mx-auto rounded-full object-cover">
+                <h2 class="font-bold mt-2">Karthi Madesh</h2>
+                <p class="text-yellow-500">Admin</p>
+            </div>
+            <button class="w-full bg-yellow-500 text-black font-semibold rounded-lg shadow-md hover:bg-yellow-600 transition p-2 mt-5">
+                Students
+            </button>
+            <button id="myInfo"
+            class="w-full text-red-600 font-semibold rounded-lg p-2 hover:bg-red-100 transition">
+                My Info
+            </button>
+        </div>
+        <button class="w-full text-red-600 font-semibold rounded-lg p-2 hover:bg-red-100 transition">
+            Logout 🔄
+        </button>
+    </div>
+
+    <div id="main-content" class="ml-64 transition-all duration-300 p-6">
+        <div class="h-[60px] border-b bg-orange-50 flex items-center justify-between px-6">
+            <button onclick="toggle()">
+                <img src="caret-circle-down 1.png" class="w-5 h-5">
+            </button>
+            <div class="flex items-center space-x-4">
+                <input id="qidiruv" type="text" placeholder="Search..." class="border p-2 rounded w-64 outline-none" onkeyup="searchFunction(this)" >
+                <img src="bell 1.png" class="w-5 h-5">
+            </div>
+        </div>
+    
+
+        <div class="bg-white p-6 rounded-lg shadow-md mt-4">
+            <div class="flex justify-between items-center border-b pb-4">
+                <h2 class="text-xl font-bold">Students List</h2>
+                <button onclick="openModal()" class="bg-yellow-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-yellow-600">
+                    ADD NEW STUDENT
+                </button>
+            </div>
+            
+            <div class="overflow-x-auto mt-4">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b bg-gray-100 text-gray-700">
+                            <th class="p-3"> </th>
+                            <th class="p-3">Name</th>
+                            <th class="p-3">Email</th>
+                            <th class="p-3">Phone</th>
+                            <th class="p-3">Enroll Number</th>
+                            <th class="p-3">Date Admission</th>
+                            <th class="p-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="student-list" class="divide-y divide-gray-200 text-gray-600">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="student-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-xl font-bold mb-4">Edit Student</h2>
+            <input id="student-name" type="text" placeholder="Name" class="border p-2 w-full mb-2 rounded">
+            <input id="student-email" type="email" placeholder="Email" class="border p-2 w-full mb-2 rounded">
+            <input id="student-phone" type="text" placeholder="Phone" class="border p-2 w-full mb-2 rounded">
+            <button onclick="saveStudent()" class="bg-yellow-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-yellow-600">
+                Save
+            </button>
+            <button onclick="closeModal()" class="text-red-500 font-bold ml-4">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+
+        let myInfo = document.getElementById("myInfo");
+        myInfo.addEventListener("click", function(){
+            window.location.href = "studentpanel.html";
+        })
+
+        let students = [
+        { name: "Karthi", email: "karthi@gmmail.com", phone: "7305477760", enroll: "1234567305477760", date: "08-Dec, 2021"},
+        { name: "John", email: "john@email.com", phone: "1234567890", enroll: "987654321", date: "12-Jan, 2022" },
+        { name: "Max", email: "maxgoat@email.com", phone: "1956894809", enroll: "987654321", date: "24-Jan, 2023" },
+        { name: "Yuri", email: "yurimms@email.com", phone: "88685333", enroll: "987654321", date: "12-Dec, 2024" },
+        { name: "Luka", email: "luka123@email.com", phone: "997865433", enroll: "987654321", date: "05-Feb, 2023" },
+        { name: "Sam", email: "samsung@email.com", phone: "986944423", enroll: "987654321", date: "17-Sep, 2024" }
+        ];
+
+    function studentPanel() {
+        let list = document.getElementById('student-list');
+        list.innerHTML = students.map((student, index) => `
+        <tr class="border-b bg-white shadow-md">
+            <td class="p-3">
+                <img src="student.jpeg" alt="${student.name}" class="w-10 h-10 rounded-full object-cover">
+            </td>
+            <td class="p-3">${student.name}</td>
+            <td class="p-3">${student.email}</td>
+            <td class="p-3">${student.phone}</td>
+            <td class="p-3">${student.enroll}</td>
+            <td class="p-3">${student.date}</td>
+            <td class="p-3 flex items-center space-x-2">
+   <button onclick="openStudentDetails(${index})">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="22px" viewBox="0 -960 960 960" width="22px" fill="#1f1f1f">
+                        <path d="M263.79-408Q234-408 213-429.21t-21-51Q192-510 213.21-531t51-21Q294-552 315-530.79t21 51Q336-450 314.79-429t-51 21Zm216 0Q450-408 429-429.21t-21-51Q408-510 429.21-531t51-21Q510-552 531-530.79t21 51Q552-450 530.79-429t-51 21Zm216 0Q666-408 645-429.21t-21-51Q624-510 645.21-531t51-21Q726-552 747-530.79t21 51Q768-450 746.79-429t-51 21Z"/>
+                    </svg>
+                </button>
+    <button onclick="editStudent(${index})" class="text-blue-500 flex items-center">
+        ✏️
+    </button>
+    <button onclick="deleteStudent(${index})" class="text-red-500 flex items-center">
+        🗑️
+    </button>
+</td>
+        </tr>`).join('');
+}
+
+function openStudentDetails(index) {
+    localStorage.setItem("selectedStudent", JSON.stringify(students[index]));
+    window.location.href = "studentinfo.html";
+}
+
+        function toggle() {
+            document.getElementById('sidebar').classList.toggle('-ml-64');
+            document.getElementById('main-content').classList.toggle('ml-0');
+        }
+
+        function openModal() {
+            document.getElementById('student-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('student-modal').classList.add('hidden');
+        }
+
+        function saveStudent() {
+            let name = document.getElementById('student-name').value;
+            let email = document.getElementById('student-email').value;
+            let phone = document.getElementById('student-phone').value;
+            let date = new Date().toLocaleDateString('en-CA');
+            students.push({ name, email, phone, enroll: '1234567305477760', date });
+            localStorage.setItem('students', JSON.stringify(students));
+            studentPanel();
+            closeModal();
+        }
+
+        function deleteStudent(index) {
+            students.splice(index, 1);
+            localStorage.setItem('students', JSON.stringify(students));
+            studentPanel();
+        }
+
+        function editStudent(index) {
+            let student = students[index];
+            document.getElementById('student-name').value = student.name;
+            document.getElementById('student-email').value = student.email;
+            document.getElementById('student-phone').value = student.phone;
+            openModal();
+        }
+        document.getElementById('qidiruv').addEventListener('input', function() {
+            let element = this.value.toLowerCase();
+            let searchElement = students.filter(student => student.name.toLowerCase().includes(element));
+            document.getElementById('student-list').innerHTML = searchElement.map((student, index) => `
+               <tr class="border-b bg-white shadow-md">
+                     <td class="p-3">
+                <img src="student.jpeg" alt="${student.name}" class="w-10 h-10 rounded-full object-cover">
+            </td>
+                    <td class="p-3 border">${student.name}</td>
+                    <td class="p-3 border">${student.email}</td>
+                    <td class="p-3 border">${student.phone}</td>
+                    <td class="p-3 border">${student.enroll}</td>
+                    <td class="p-3 border">${student.date}</td>
+                    <td class="p-3">
+                        <button onclick="editStudent(${index})" class="text-blue-500">✏️</button>
+                        <button onclick="deleteStudent(${index})" class="text-red-500 hover:text-red-700">🗑️</button>
+                    </td>
+                </tr>
+            `).join('');
+        });
+        studentPanel();
+    </script>
+</body>
+</html>
